@@ -14,8 +14,8 @@
 ```markdown
 
 文学——[最喜欢的一本书](https://dingyuqing0908.github.io/dingyuqing.github.io/book.html)
-音乐——[最喜欢的一首歌](https://dingyuqing0908.github.io/dingyuqing.github.io/song.html))
-电影——[最喜欢的一部电影](https://dingyuqing0908.github.io/dingyuqing.github.io/film.html))
+音乐——[最喜欢的一首歌](https://dingyuqing0908.github.io/dingyuqing.github.io/song.html)
+电影——[最喜欢的一部电影](https://dingyuqing0908.github.io/dingyuqing.github.io/film.html)
 
 其他：[秘密空间](https://dingyuqing0908.github.io/dingyuqing.github.io/password.html)
 
