@@ -1,0 +1,319 @@
+---
+title: "互联网分析与治理"
+author: "丁玉清"
+date: "2020/6/19"
+output:
+  ioslides_presentation: default
+  powerpoint_presentation: default
+---
+## 目录
+- 自我介绍
+- R语言基础
+- 时间计算
+- R语言绘图初级
+- R语言绘图进阶
+
+
+## 自我介绍
+- 丁玉清
+- 四川大学公共管理学院信息资源管理专业2018级本科生
+- 2018141095026
+![Caption for the picture.](1.jpg)
+
+## R语言基础
+### R语言的数据结构
+
+- 对象
+- 属性
+- 向量
+- 矩阵
+- 数组
+- 列表
+- 因子
+- 缺失值
+- 数据框
+- 日期与时间
+## 对象
+
+### 对象的5种类型
+
+- 字符character
+- 数值numeric
+- 整数integer
+- 复数complex
+- 逻辑logic
+
+## 属性
+
+- 名称
+- 维度
+- 类型
+- 长度
+
+## 向量
+
+- R中最常用的数据结构
+- 只能包含同一类型的对象
+- 创建向量 e.g. x <- vector("xx",length=xx)
+
+## 矩阵
+
+- 向量+维度属性（整数向量：nrow,ncol）
+- 创建矩阵 e.g.x <- matrix(nrow=x, ncol=x)
+- 添加数值 e.g.x <- matrix(x:x,nrow=x,ncol=x)
+- 查看行列 e.g. dim(x)
+- 查看属性 e.g. attributes(x)
+- 拼接矩阵 按行 e.g. rbind(x,x1) 按列 e.g.cbind(x,x1)
+
+## 数组
+
+- 与矩阵类似，但维度可以大于2（矩阵只能等于2）
+- 创建数组 e.g. x <- array(xx)
+
+## 列表
+
+- 可以包含不同类型的对象
+- 创建列表 e.g. l <- list(xx)
+
+## 因子
+
+- 整数向量+标签label
+- 用于处理分类数据（有序/无序）
+- 创建因子 e.g. x<- factor(c(xx))
+- 查看因子 e.g. table(x)/unclass(x)
+
+## 缺失值
+
+- 两种表示方式：NA/NaN
+- 判断是否有缺失值：is.na()/is.nan()
+- NA有类型属性，范围更广，NaN只表示数字的缺失值
+- NaN属于NA，NA不属于NaN
+
+## 数据框
+
+- 存储表格数据
+- 视为各元素长度相同的列表
+- 创建数据框 e.g. df <- data.frame()
+
+## 日期与时间
+
+- 日期date：存储当天日期距1970.01.01的天数
+- 常用函数：data()/Sys.Date()/weekdays()/months()/quaters()
+- 时间POSIXct/POSIXlt：存储距离1970.01.01的秒数
+- 常用函数：as.Date()/as.POSIXct()/as.POSIXlt()/strptime()
+
+
+## 时间计算1
+```{r}
+missscu <- function(theday = "2020-01-20"){
+  today <- Sys.Date()
+  days <- today - as.Date(theday)
+  paste0("今天是我离开学校的第",days,"天")
+}
+
+missscu()
+```
+
+## 时间计算2
+```{r}
+missscu <- function(theday = "1999-09-08"){
+  today <- Sys.Date()
+  days <- today - as.Date(theday)
+  paste0("今天是我出生的第",days,"天")
+}
+
+missscu()
+```
+
+## 时间计算3
+```{r}
+missscu <- function(theday = "2020-09-08"){
+  today <- Sys.Date()
+  days <- as.Date(theday) - today
+  paste0("今天距离我今年的生日还有",days,"天")
+}
+
+missscu()
+```
+
+## R语言作图初级
+
+```{r}
+library(ggplot2)
+library(leaflet)
+library(plotly)
+library(dplyr)
+```
+
+## 散点图
+- 随机产生20个点，绘制图形。
+```{r}
+set.seed(1234)
+x<-sample(1:100,20,replace = F)
+y<-2*x+20+rnorm(20,0,1)
+plot(x = x,y = y)
+plot(x,y)
+```
+
+## 添加标题，将空心改为实心
+```{r}
+set.seed(1234)
+x<-sample(1:100,20,replace = F)
+y<-2*x+20+rnorm(20,0,1)
+plot(x = x,y = y)
+plot(x,y,main= "随机散点图",xlim=c(1,100),ylim=c(1,100),pch=19)
+```
+
+## 折线图
+- 随机产生20个时间点，绘制图形。
+```{r}
+t<-1:20
+set.seed(1234)
+v<-rnorm(20,0,10)
+plot(t,v,type="l")
+```
+## 将实线改为虚线
+```{r}
+t<-1:20
+set.seed(1234)
+v<-rnorm(20,0,10)
+plot(t,v,type="l",lty=2)
+```
+
+## 饼图
+- 随机产生5年内数据。
+```{r}
+year<-2015:2020
+set.seed(1234)
+counts<-sample(100:500,5)
+lb<-paste(year,counts,sep=":")
+pie(counts,labels = lb)
+```
+
+
+## 直方图
+```{r}
+set.seed(1234)
+x<-rnorm(20,0,1)
+hist(x)
+```
+
+## 箱线图
+- 绘制数据集counts的箱线图
+```{r}
+boxplot(counts)
+```
+
+## 使用ggplot2画图
+```{r}
+require(ggplot2)
+data("diamonds")
+set.seed(42)
+small <-  diamonds[sample(nrow(diamonds),"1000"),]
+head(small)
+summary(small)
+```
+
+## 散点图
+```{r}
+p <- ggplot(data = small, mapping = aes(x = carat, y = price))
+p + geom_point()
+```
+
+## 线图
+```{r}
+p <- ggplot(data = small,mapping =  aes(x = carat, y = price,colour =color))
+p + stat_smooth()
+```
+
+## 直方图
+
+```{r warning=FALSE}
+ggplot(small)+
+geom_histogram(aes(x=price))
+```
+```{r}
+class2<-mpg$class
+class2<-reorder(class2,class2,length)
+mpg$class<-class2
+p<-ggplot(mpg,aes(x=class2))
+p+geom_bar(aes(fill=class2))
+```
+
+## 柱状图
+```{r}
+g<-ggplot(small)+
+  geom_bar(aes(x=clarity))
+```
+
+## 饼图
+```{r}
+ggplot(small)+geom_bar(aes(x=factor(1), fill=cut))+coord_polar(theta="y")
+```
+
+## ggplotly示例
+```{r}
+g<-ggplot(small)+geom_bar(aes(x=clarity))
+ggplotly(g)
+```
+
+```{r}
+COVID <- read.csv("COVID19-china.csv")
+```
+
+## 中国疫情动态地图
+
+```{r}
+leaflet(width = "100%") %>% 
+  addProviderTiles("Esri.WorldStreetMap") %>% 
+  setView(lng = 116.40, lat = 39.90, zoom = 3) %>% 
+  addCircleMarkers(data = COVID, 
+                   lng = ~ Long,
+                   lat = ~ Lat,
+                   radius = ~ log(Confirmed+1),
+                   fillOpacity = ~ ifelse(Confirmed > 0, 1, 0),
+                   stroke = FALSE,
+                   label = ~ 
+                     paste(Province.State, ": ", Confirmed)
+                   )
+```
+
+## 中国985高校分布动态地图
+```{r}
+university<-read.csv("university.csv")
+```
+
+
+```{r}
+leaflet(width = "100%") %>% 
+  addProviderTiles("Wikimedia") %>% 
+  setView(lng = 104, lat = 28, zoom = 2.5) %>%
+  addCircleMarkers(data = university, 
+                   lng = ~ Long,
+                   lat = ~ lat,
+                   stroke = FALSE,
+                   label = ~ 
+                     paste(university)
+                   )
+```
+
+## 中国人口分布地图
+```{r}
+province<-read.csv("province.csv")
+```
+
+```{r}
+leaflet(width = "100%") %>% 
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  setView(lng = 104, lat = 28, zoom = 2.5) %>%
+  addCircleMarkers(data = province, 
+                   lng = ~ Long,
+                   lat = ~ Lat,
+                   color = rgb(218/255,65/255,56/255),  
+                   stroke = FALSE,
+                   label = ~ 
+       paste(Province,provincal.capital,":",population)
+                   )
+```
+
+## Thank you for watching!
